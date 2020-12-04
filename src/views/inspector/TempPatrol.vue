@@ -60,7 +60,7 @@
         </ion-select>
       </ion-item>
 
-      <ion-item>
+      <!-- <ion-item>
         <ion-icon name="skip-forward"></ion-icon>
         <ion-label>选择结束桩</ion-label>
         <ion-select
@@ -77,15 +77,7 @@
             >{{ stake.name }}</ion-select-option
           >
         </ion-select>
-      </ion-item>
-
-      <!-- <ion-item>
-        <ion-icon name="skip-forward"></ion-icon>
-        <ion-label>选择结束桩</ion-label>
-        <ion-input type="number" placeholder="请输入起始桩"></ion-input>
-        <ion-label>号桩</ion-label>
       </ion-item> -->
-
       <ion-item>
         <ion-icon name="business" slot="start"></ion-icon>
         <ion-label>管理单位</ion-label>
@@ -282,7 +274,7 @@ export default {
       if (
         !(
           this.patrolResult.roadSectionId === null ||
-          this.patrolResult.stakeEndId === null ||
+          // this.patrolResult.stakeEndId === null ||
           this.patrolResult.stakeBeginId === null ||
           this.patrolResult.patrolCar === null
         )
