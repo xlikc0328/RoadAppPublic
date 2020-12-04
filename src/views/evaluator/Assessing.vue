@@ -87,7 +87,7 @@ export default {
   },
 
   mounted() {
-    this.$refs.header.title = '公路巡检病害评估'
+    this.$refs.header.title = '公路巡查病害评估'
     this.listAssessingAppraisal()
   },
 

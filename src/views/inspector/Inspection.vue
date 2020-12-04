@@ -3,19 +3,19 @@
     <Header ref="header"/>
     <ion-card>
       <ion-card-header style="text-align:center;" >
-        <ion-card-subtitle class="title_card" >- 请选择巡检类型 -</ion-card-subtitle>
+        <ion-card-subtitle class="title_card" >- 请选择巡查类型 -</ion-card-subtitle>
       </ion-card-header>
       <ion-grid style="height:50%">
         <ion-row>
           <ion-col style="padding-bottom:10%;">
             <img src="@/assets/img/icon1.png" id="imgsize" @click="dailyPatrol"> 
-            <ion-title class='font1'>日常巡检线路</ion-title>
-            <ion-title class='font2' style="font-size:.7rem;">日常负责的巡检线路</ion-title>  
+            <ion-title class='font1'>日常巡查线路</ion-title>
+            <ion-title class='font2' style="font-size:.7rem;">日常负责的巡查线路</ion-title>  
           </ion-col>
           <ion-col>
             <img src="@/assets/img/icon2.png" id="imgsize"  @click="tempPatrol">
-            <ion-title class='font1'>临时巡检线路</ion-title>
-            <ion-title class='font2' style="font-size:.7rem;">临时负责的巡检线路</ion-title>
+            <ion-title class='font1'>临时巡查线路</ion-title>
+            <ion-title class='font2' style="font-size:.7rem;">临时负责的巡查线路</ion-title>
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -23,7 +23,7 @@
     <ion-card>
       <ion-item @click="record">
         <ion-icon name="menu"></ion-icon>
-        <ion-label>最近巡检记录({{ patrolResultList.length }}条)</ion-label>
+        <ion-label>最近巡查记录({{ patrolResultList.length }}条)</ion-label>
         <ion-icon name="arrow-dropright"></ion-icon>
       </ion-item>
       <ion-item v-for="patrolResult in patrolResultList" :key="patrolResult.patrolResultId" @click="viewPatrol(patrolResult.patrolResultId)">
@@ -62,7 +62,7 @@ export default {
   },
 
   mounted() {
-    this.$refs.header.title = '大连公路巡检'
+    this.$refs.header.title = '大连公路巡查'
     this.listPatrol()
   },
 

@@ -5,7 +5,7 @@
     <ion-card>
       <ion-item>
         <ion-icon name="flashlight" slot="start"></ion-icon>
-        <ion-label> 巡检路段  {{ patrolInfo.nationalHighwayName }} {{ patrolInfo.roadSectionName }} {{ patrolInfo.beginStake }}~{{ patrolInfo.endStake }}</ion-label>
+        <ion-label> 巡查路段  {{ patrolInfo.nationalHighwayName }} {{ patrolInfo.roadSectionName }} {{ patrolInfo.beginStake }}~{{ patrolInfo.endStake }}</ion-label>
       </ion-item>
 
       <ion-item>
@@ -81,7 +81,7 @@ export default {
     }
   },
   mounted() {
-    this.$refs.header.title = '巡检结果'
+    this.$refs.header.title = '巡查结果'
     this.getPatrolInfo()
     this.getProblems()
   },
@@ -93,7 +93,7 @@ export default {
     },
 
     /**
-     * 获取本次巡检问题列表
+     * 获取本次巡查问题列表
      */
     getProblems() {
       const params = {
@@ -126,12 +126,12 @@ export default {
     },
 
     /**
-     * 巡检开始二次确认
+     * 巡查开始二次确认
      */
     confirmEnd() {
       this.$ionic.alertController.create({
-        header: '日常巡检',
-        message: '确定要结束日常巡检吗？',
+        header: '日常巡查',
+        message: '确定要结束日常巡查吗？',
         buttons: [
           {
             text: '确定',

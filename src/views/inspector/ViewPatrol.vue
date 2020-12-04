@@ -5,7 +5,7 @@
     <ion-card>
       <ion-item>
         <ion-icon name="flashlight" slot="start"></ion-icon>
-        <ion-label>巡检路线 {{ patrolInfo.nationalHighwayName }} {{ patrolInfo.roadSectionName }} {{ patrolInfo.beginStake }}~{{ patrolInfo.endStake }} </ion-label>
+        <ion-label>巡查路线 {{ patrolInfo.nationalHighwayName }} {{ patrolInfo.roadSectionName }} {{ patrolInfo.beginStake }}~{{ patrolInfo.endStake }} </ion-label>
       </ion-item>
 
       <ion-item>
@@ -77,7 +77,7 @@ export default {
     }
   },
   mounted() {
-    this.$refs.header.title = '查看巡检'
+    this.$refs.header.title = '查看巡查'
     this.getPatrolInfo()
     this.getProblemsCondition()
   },

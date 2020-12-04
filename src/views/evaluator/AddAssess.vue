@@ -5,7 +5,7 @@
     <ion-card>
       <ion-item>
         <ion-col size="3">
-          <ion-label>巡检路线</ion-label>
+          <ion-label>巡查路线</ion-label>
         </ion-col>
         <ion-col>
            <p style="text-align:right">{{ roadInfo.nationalHighwayName }} {{ roadInfo.roadSectionName }}</p>
@@ -19,7 +19,7 @@
       </ion-item>
 
       <ion-item>
-        <ion-label>病害情况</ion-label>
+        <ion-label>病害类型</ion-label>
         <ion-select :value="addAssessInfoForm.hazardStatus" @ionChange="addAssessInfoForm.hazardStatus=$event.target.value" placeholder="选择" ok-Text="确定" cancel-text="取消">
          <ion-select-option v-for="(option, index) in hazardList" :key="index" :value = option.info_id>{{ option.name }}</ion-select-option>
         </ion-select>
@@ -36,7 +36,7 @@
           <ion-label>长度</ion-label>
         </ion-segment-button>
         <ion-segment-button value="count" @click="handleCount">
-          <ion-label>个数</ion-label>
+          <ion-label>数量</ion-label>
         </ion-segment-button>
       </ion-segment>
 
@@ -60,7 +60,7 @@
             <ion-input type="number" placeholder="请输入长度" :value="lengthOrNumberLength" @ionInput="lengthOrNumberLength=$event.target.value"></ion-input>
           </ion-col>
           <ion-col v-if="!length">
-            <ion-input type="number" placeholder="请输入个数" :value="lengthOrNumberNumber" @ionInput="lengthOrNumberNumber=$event.target.value"></ion-input>
+            <ion-input type="number" placeholder="请输入数量" :value="lengthOrNumberNumber" @ionInput="lengthOrNumberNumber=$event.target.value"></ion-input>
           </ion-col>
         </ion-row>
       </ion-grid>
@@ -150,7 +150,7 @@ export default {
       addAssessInfoForm:{
         //位置（桩+侧+米）
         position:"",
-        //病害情况
+        //病害类型
         hazardStatus:"",
         //类型尺寸
         sizeType:"",
@@ -164,7 +164,7 @@ export default {
         longitude:"",
         //纬度
         latitude:"",
-        //巡检情况
+        //巡查情况
         patrolResultId:"",
         //申请表
         applicationId:'',

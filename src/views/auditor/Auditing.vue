@@ -95,7 +95,7 @@ export default {
 
   mounted() {
     this.listAcceptanceIng()
-    this.$refs.header.title = '公路巡检核量'
+    this.$refs.header.title = '公路巡查核量'
   },
 
   methods: {

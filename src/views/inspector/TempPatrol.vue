@@ -136,7 +136,7 @@ export default {
     }
   },
   mounted() {
-    this.$refs.header.title = '临时巡检'
+    this.$refs.header.title = '临时巡查'
     this.listNationalHighway()
     this.listPatrolCar()
     this.listStake()

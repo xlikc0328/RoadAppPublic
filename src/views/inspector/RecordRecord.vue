@@ -95,7 +95,7 @@ export default {
     }
   },
   mounted() {
-    this.$refs.header.title = '巡检记录'
+    this.$refs.header.title = '巡查记录'
     this.listNationalHighway()
     this.listStake()
   },

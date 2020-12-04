@@ -25,7 +25,7 @@
         <!-- Provide a custom route to navigate to -->
         <ion-tab-button tab="inspection">
           <ion-icon name="man"></ion-icon>
-          <ion-label>巡检</ion-label>
+          <ion-label>巡查</ion-label>
         </ion-tab-button>
 
         <!-- Provide extra data to route -->

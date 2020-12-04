@@ -5,7 +5,7 @@
     <ion-card>
       <ion-item>
         <ion-col size="3">
-          <ion-label>巡检路线</ion-label>
+          <ion-label>巡查路线</ion-label>
         </ion-col>
         <ion-col>
            <p style="text-align:right">{{ roadInfo.nationalHighwayName }} {{ roadInfo.roadSectionName }}</p>
@@ -19,7 +19,7 @@
       </ion-item>
 
       <ion-item>
-        <ion-label>病害情况</ion-label>
+        <ion-label>病害类型</ion-label>
         <p class="xinxi">{{hazardName.name}}</p>
       </ion-item>
 

@@ -1,6 +1,6 @@
 <template>
   <ion-app class="background">
-    <ion-label class="label" >大连公路巡检</ion-label>
+    <ion-label class="label" >大连公路巡查</ion-label>
     <div>
       <ion-input placeholder="用户名" class="input" :value="username" @ionInput="username=$event.target.value"></ion-input>
       <ion-input placeholder="密码" class="input" type="password" :value="password" @ionInput="password=$event.target.value"></ion-input>

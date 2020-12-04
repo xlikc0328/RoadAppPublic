@@ -5,7 +5,7 @@
     <ion-card>
       <ion-item>
         <ion-col size="3">
-          <ion-label>巡检路线</ion-label>
+          <ion-label>巡查路线</ion-label>
         </ion-col>
         <ion-col>
            <p style="text-align:right">{{ roadInfo.nationalHighwayName }} {{ roadInfo.roadSectionName }}</p>
@@ -19,7 +19,7 @@
       </ion-item>
 
       <ion-item>
-        <ion-label>病害情况</ion-label>
+        <ion-label>病害类型</ion-label>
         <p class="xinxi">{{hazardName.name}}</p>
       </ion-item>
 
@@ -84,7 +84,7 @@ export default {
     }
   },
   mounted() {
-    this.$refs.header.title = '查看巡检'
+    this.$refs.header.title = '查看巡查'
     this.getcheckRoadProblem()
     this.getRoadSection()
   },
@@ -152,7 +152,7 @@ export default {
              this.$ionic.alertController
                 .create({
                 header: '删除问题',
-                message: '删除失败,巡检已结束！',
+                message: '删除失败,巡查已结束！',
                 buttons: ['确定'],
                 }).then(a => a.present())
             }
