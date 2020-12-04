@@ -117,8 +117,12 @@
         <ion-label>{{ inspectorName }}</ion-label>
       </ion-item>
     </ion-card>
-    <ion-button expand="block" @click="patrolBegin">开始巡查</ion-button>
-
+    <ion-button expand="block" @click="confirmBegin" v-if="patrolBeginBtn"
+      >开始巡查</ion-button
+    >
+    <ion-button expand="block" v-if="patrollingBtn" disabled="true"
+      >巡查中</ion-button
+    >
     <ion-card>
       <ion-item v-if="patrolEndBtn" @click="addProblem">
         <ion-icon name="add-circle-outline" slot="start"></ion-icon>
@@ -178,6 +182,8 @@ export default {
   },
   data() {
     return {
+      patrollingBtn: false,
+      patrolBeginBtn: true,
       problems: {},
       problemCount: null,
       patrolInfo: {},
@@ -250,7 +256,23 @@ export default {
         }
       });
     },
-
+    confirmBegin() {
+      this.$ionic.alertController
+        .create({
+          header: "临时巡查",
+          message: "确定要开始临时巡查吗？",
+          buttons: [
+            { text: "取消" },
+            {
+              text: "确定",
+              handler: () => {
+                this.patrolBegin();
+              },
+            },
+          ],
+        })
+        .then((a) => a.present());
+    },
     /**
      * 开始巡查
      */
@@ -270,6 +292,11 @@ export default {
             this.patrolResultId = response.data.patrolResultId;
             setStore("patrolResultId", response.data.patrolResultId);
             this.patrolEndBtn = true;
+            this.patrolBeginBtn = false;
+            this.patrollingBtn = true;
+            this.patrolCarShow = true;
+            this.patrolBeginTime = true;
+            this.patrolBeginInfo = response.data;
             this.$ionic.alertController
               .create({
                 header: "开始巡查",
