@@ -56,7 +56,7 @@
         暂无图片
       </ion-label>
     </ion-card>
-    <ion-button expand="block" color="primary" @click="corfirmEnd">保存</ion-button>
+    <ion-button expand="block" color="primary" @click="editProblem(roadHazardId,patrolResultId)">编辑</ion-button>
     <ion-button expand="block" color="danger" @click="corfirmEnd">删除问题</ion-button>
     <TabBar />
   </div>
@@ -77,6 +77,8 @@ export default {
   data() {
     let self = this
     return {
+      roadHazardId: this.$route.query.roadHazardId,
+      patrolResultId: this.$route.query.patrolResultId,
       hazardImgs:[],
       dataProblem: {},
       hazardName: {},
@@ -85,6 +87,7 @@ export default {
     }
   },
   mounted() {
+    // this.roadHazardId: this.$route.query.roadHazardId,
     this.$refs.header.title = '查看巡查'
     this.getcheckRoadProblem()
     this.getRoadSection()
@@ -97,8 +100,6 @@ export default {
       this.$router.push({path:'/home'})
     },
     getRoadSection() {
-      console.log("11111111")
-      console.log(this.$route.query.patrolResultId);
       const params = {
         patrolResultId: this.$route.query.patrolResultId
       }
@@ -122,7 +123,12 @@ export default {
 
       })
     },
-
+    editProblem(roadHazardId, patrolResultId) {
+      this.$router.push({
+        path: "/edit_problem",
+        query: { roadHazardId: roadHazardId, patrolResultId: patrolResultId },
+      });
+    },
     corfirmEnd() {
       this.$ionic.alertController.create({
         header: '删除问题',

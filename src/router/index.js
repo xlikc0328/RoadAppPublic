@@ -8,6 +8,7 @@ import Record from '@/views/inspector/Record.vue'
 import Home from '@/views/inspector/Home.vue'
 import Problem from '@/views/inspector/Problem.vue'
 import ViewProblem from '@/views/inspector/ViewProblem.vue'
+import EditProblem from '@/views/inspector/EditProblem.vue'
 import DailyPatrol from '@/views/inspector/DailyPatrol.vue'
 import TempPatrol from '@/views/inspector/TempPatrol.vue'
 import ViewPatrol from '@/views/inspector/ViewPatrol.vue'
@@ -48,6 +49,11 @@ const routes = [
     path: '/view_problem',
     name: 'ViewProblem',
     component: ViewProblem
+  },
+  {
+    path: '/edit_problem',
+    name: 'EditProblem',
+    component: EditProblem
   },
   {
     path: '/settings',
