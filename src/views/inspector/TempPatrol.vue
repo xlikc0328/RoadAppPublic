@@ -7,7 +7,7 @@
         <ion-icon name="locate" slot="start"></ion-icon>
         <ion-label>选择路线</ion-label>
         <ion-select
-          placeholder="请选择"
+          placeholder="请选择高速"
           :value="nationalHighwayId"
           @ionChange="nationalHighwayId = $event.target.value"
           ok-text="确定"
@@ -20,9 +20,22 @@
             >{{ highway.highwayName }}</ion-select-option
           >
         </ion-select>
+        <ion-select
+          placeholder="请选择路段"
+          :value="patrolResult.roadSectionId"
+          @ionChange="patrolResult.roadSectionId = $event.target.value"
+          ok-text="确定"
+          cancel-text="取消"
+        >
+          <ion-select-option
+            v-for="(roadSection, index) in roadSections"
+            :key="index"
+            :value="roadSection.roadSectionId"
+            >{{ roadSection.name }}</ion-select-option
+          >
+        </ion-select>
       </ion-item>
-
-      <ion-item>
+      <!-- <ion-item>
         <ion-icon name="locate" slot="start"></ion-icon>
         <ion-label>选择路线</ion-label>
         <ion-select
@@ -39,8 +52,7 @@
             >{{ roadSection.name }}</ion-select-option
           >
         </ion-select>
-      </ion-item>
-
+      </ion-item> -->
       <ion-item>
         <ion-icon name="skip-backward"></ion-icon>
         <ion-label>选择起始桩</ion-label>
