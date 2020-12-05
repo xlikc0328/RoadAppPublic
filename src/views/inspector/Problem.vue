@@ -18,24 +18,32 @@
         <!-- <div style="display:inline-block;width:82%"> -->
           <ion-grid>
             <ion-row>
-            <ion-col>
-              <ion-select placeholder="桩" :value="stake" @ionChange="stake=$event.target.value" style="display:inline-block;font-size:14px;text-align:center" ok-text="确定" cancel-text="取消">
-                <ion-select-option v-for="(stake, index) in stakes" :key="index" :value=stake.stakeId>{{ stake.name }}</ion-select-option>
-              </ion-select>
-            </ion-col>
+              <ion-col>
+                <ion-input type="number" placeholder="如：12.3" style="font-size:14px;" :value="stake" @ionChange="stake=$event.target.value"></ion-input>
+                <!-- <ion-select placeholder="桩.米" :value="stake" @ionChange="stake=$event.target.value" style="display:inline-block;font-size:14px;text-align:center" ok-text="确定" cancel-text="取消">
+                  <ion-select-option v-for="(stake, index) in stakes" :key="index" :value=stake.stakeId>{{ stake.name }}</ion-select-option>
+                </ion-select> -->
+              </ion-col>
 
-            <ion-col>
-              <ion-select  placeholder="侧" :value="orientation" @ionChange="orientation=$event.target.value"  style="display:inline-block;font-size:14px;text-align:center" ok-text="确定" cancel-text="取消">
-                <ion-select-option>左侧</ion-select-option>
-                <ion-select-option>右侧</ion-select-option>
-              </ion-select>
-            </ion-col>
+              <ion-col>
+                <ion-select  placeholder="行" :value="stream" @ionChange="stream=$event.target.value"  style="display:inline-block;font-size:14px;text-align:center" ok-text="确定" cancel-text="取消">
+                  <ion-select-option>上行</ion-select-option>
+                  <ion-select-option>下行</ion-select-option>
+                </ion-select>
+              </ion-col>
 
-            <ion-col>
-              <ion-input type="number" placeholder="米" style="font-size:14px;" :value="relativeLength" @ionChange="relativeLength=$event.target.value"></ion-input>
-              <span style=" position: absolute; top: 1%; right: 6%;color: #adadad; display: table-cell;white-space: nowrap; padding: 7px 10px;">米</span>
-            </ion-col>
-          </ion-row>
+              <ion-col>
+                <ion-select  placeholder="侧" :value="orientation" @ionChange="orientation=$event.target.value"  style="display:inline-block;font-size:14px;text-align:center" ok-text="确定" cancel-text="取消">
+                  <ion-select-option>左侧</ion-select-option>
+                  <ion-select-option>右侧</ion-select-option>
+                </ion-select>
+              </ion-col>
+
+              <!-- <ion-col>
+                <ion-input type="number" placeholder="米" style="font-size:14px;" :value="relativeLength" @ionChange="relativeLength=$event.target.value"></ion-input>
+                <span style=" position: absolute; top: 1%; right: 6%;color: #adadad; display: table-cell;white-space: nowrap; padding: 7px 10px;">米</span>
+              </ion-col> -->
+            </ion-row>
           </ion-grid>
           
         <!-- </div> -->
@@ -91,7 +99,7 @@
       <ion-item>
         <ion-label>是否存在安全隐患</ion-label>
       
-        <ion-toggle @ionChange="addRoadProblemForm.potentialHazard=$event.target.checked"   ></ion-toggle>
+        <ion-toggle @ionChange="addRoadProblemForm.potentialHazard=$event.target.checked"></ion-toggle>
      
         <!-- <ion-toggle color="danger" checked ="true"  @ionChange="addRoadProblemForm.potentialHazarad=$event.target.value"></ion-toggle> -->
       </ion-item>
@@ -133,22 +141,25 @@
       </div>
     </ion-card>
 
-    <ion-button expand="block" color="danger" @click="addRoadProblem()">提交问题</ion-button>
+    <ion-button expand="block" color="danger" @click="clickHandle()">提交问题</ion-button>
   </div>
 </template>
 <script>
+// import { toastController } from '@ionic/vue';
+
 import HeaderMap from '@/components/HeaderMap'
 import Header from '@/components/Header'
 import TabBar from '@/components/TabBar'
 import * as API from '@/api/API'
 import axios from 'axios'
 import{getStore,setStore,removeStore} from "@/assets/js/localStorage";
+
 export default {
   name:'Problem',
   components: {
     Header,
     HeaderMap,
-    TabBar
+    TabBar,
   },
   data: function () {
     return {
@@ -158,9 +169,11 @@ export default {
       size: 0,
       limit: 6, //限制图片上传的数量
       tempImgs: [],
-      stake:'',
+      stake:'',//桩.米
       stakes: [],
-      orientation:'',
+      orientation:'',//侧
+      stream: '',//行
+      flag: 0,//0代表已选，1代表体积未选，2代表面积未选，3代表长度未选，4代表数量未选
       relativeLength:'',
       cubeOrSquare: true,
       square: false,
@@ -201,8 +214,8 @@ export default {
 
   mounted(){
     this.$refs.header.title = '添加问题'
-    this.getAllhazard();
-    this.getAllUnit();
+    this.getAllhazard()
+    this.getAllUnit()
     this.listStake()
     this.getRoadSection()
   },
@@ -233,33 +246,153 @@ export default {
       this.lengthOrNumberNumber = null
     },
     handleCube() {
+      this.flag = 1
       this.cubeOrSquare = true
       this.lengthOrNumber = false
       this.square = false
       this.clearAll()
     },
     handleSquare() {
+      this.flag = 2
       this.cubeOrSquare = true
       this.lengthOrNumber = false
       this.square = true
       this.clearAll()
     },
     handleLength() {
+      this.flag = 3
       this.cubeOrSquare = false
       this.lengthOrNumber = true
       this.length = true
       this.clearAll()
     },
     handleCount() {
+      this.flag = 4
       this.cubeOrSquare = false
       this.lengthOrNumber = true
       this.length = false
       this.clearAll()
     },
+    clickHandle() {
+      if(this.flag == 1 || this.flag == 0) {  
+        if(this.flag == 0 && !this.cubeOrSquareLength && !this.cubeOrSquareWidth && !this.cubeOrSquareHeight) {
+          this.$ionic.alertController
+              .create({
+                header: "提交问题",
+                message: "请填写具体的病害情况！",
+                buttons: ["确定"],
+              })
+              .then((a) => a.present());
+        }else if(!this.cubeOrSquareLength || !this.cubeOrSquareWidth || !this.cubeOrSquareHeight) {
+             this.$ionic.alertController
+            .create({
+              header: "提交问题",
+              message: "请填写长、宽、高！",
+              buttons: ["确定"],
+            })
+            .then((a) => a.present());
+                
+        }else if(this.cubeOrSquareLength && this.cubeOrSquareWidth && this.cubeOrSquareHeight) {
+          this.$ionic.alertController
+            .create({
+              header: "提交问题",
+              message: "确定要提交问题吗？",
+              buttons: [
+                { text: "取消" },
+                {
+                  text: "确定",
+                  handler: () => {
+                    this.addRoadProblem();
+                  },
+                },
+              ],
+            })
+            .then((a) => a.present());
+        }
+      }else if(this.flag == 2) {
+        if(!this.cubeOrSquareLength || !this.cubeOrSquareWidth) {
+          this.$ionic.alertController
+            .create({
+              header: "提交问题",
+              message: "请填写长、宽！",
+              buttons: ["确定"],
+            })
+            .then((a) => a.present());
+        }else if(this.cubeOrSquareLength && this.cubeOrSquareWidth) {
+          this.$ionic.alertController
+            .create({
+              header: "提交问题",
+              message: "确定要提交问题吗？",
+              buttons: [
+                { text: "取消" },
+                {
+                  text: "确定",
+                  handler: () => {
+                    this.addRoadProblem();
+                  },
+                },
+              ],
+            })
+            .then((a) => a.present());
+        }
+      }else if(this.flag == 3) {
+        if(!this.lengthOrNumberLength) {
+          this.$ionic.alertController
+            .create({
+              header: "提交问题",
+              message: "请填写长度！",
+              buttons: ["确定"],
+            })
+            .then((a) => a.present());
+        }else if(this.lengthOrNumberLength) {
+          this.$ionic.alertController
+            .create({
+              header: "提交问题",
+              message: "确定要提交问题吗？",
+              buttons: [
+                { text: "取消" },
+                {
+                  text: "确定",
+                  handler: () => {
+                    this.addRoadProblem();
+                  },
+                },
+              ],
+            })
+            .then((a) => a.present());
+        }
+      }else if(this.flag == 4) {
+        if(!this.lengthOrNumberNumber) {
+          this.$ionic.alertController
+            .create({
+              header: "提交问题",
+              message: "请填写数量！",
+              buttons: ["确定"],
+            })
+            .then((a) => a.present());
+        }else if(this.lengthOrNumberNumber) {
+          this.$ionic.alertController
+            .create({
+              header: "提交问题",
+              message: "确定要提交问题吗？",
+              buttons: [
+                { text: "取消" },
+                {
+                  text: "确定",
+                  handler: () => {
+                    this.addRoadProblem();
+                  },
+                },
+              ],
+            })
+            .then((a) => a.present());
+        }
+      }
+    },
     addRoadProblem() {
       this.stake =this.stake + "桩"
       this.relativeLength = this.relativeLength + "米";
-      this.addRoadProblemForm.position = this.stake +" "+ this.orientation + " "+this.relativeLength;
+      this.addRoadProblemForm.position = this.stake + " " + this.stream + "" + this.orientation + " " + this.relativeLength;
       if(this.addRoadProblemForm.potentialHazard){
         this.addRoadProblemForm.potentialHazard="有"
       }else{
