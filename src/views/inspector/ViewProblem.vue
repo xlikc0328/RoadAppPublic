@@ -56,7 +56,8 @@
         暂无图片
       </ion-label>
     </ion-card>
-    <ion-button expand="block" color="primary" @click="corfirmEnd">删除问题</ion-button>
+    <ion-button expand="block" color="primary" @click="corfirmEnd">保存</ion-button>
+    <ion-button expand="block" color="danger" @click="corfirmEnd">删除问题</ion-button>
     <TabBar />
   </div>
 </template>
@@ -90,16 +91,20 @@ export default {
   },
   methods: {
     back() {
-        this.$router.go(-1)
-      },
-      home(){
-        this.$router.push({path:'/home'})
-      },
+      this.$router.go(-1)
+    },
+    home(){
+      this.$router.push({path:'/home'})
+    },
     getRoadSection() {
+      console.log("11111111")
+      console.log(this.$route.query.patrolResultId);
       const params = {
         patrolResultId: this.$route.query.patrolResultId
       }
       API.getRoadSection(params).then(response => {
+        console.log("response");
+        console.log(response);
         if(response.statusCode === 1) {
           this.roadInfo = response.data
         }

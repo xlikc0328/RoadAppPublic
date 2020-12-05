@@ -225,6 +225,8 @@ export default {
       const params = {
         patrolResultId: this.$route.query.patrolResultId
       }
+      console.log("this.$route.query.patrolResultId")
+      console.log(this.$route.query.patrolResultId)
       API.getRoadSection(params).then(response => {
         if(response.statusCode === 1) {
           this.roadInfo = response.data
@@ -277,20 +279,20 @@ export default {
       if(this.flag == 1 || this.flag == 0) {  
         if(this.flag == 0 && !this.cubeOrSquareLength && !this.cubeOrSquareWidth && !this.cubeOrSquareHeight) {
           this.$ionic.alertController
-              .create({
-                header: "提交问题",
-                message: "请填写具体的病害情况！",
-                buttons: ["确定"],
-              })
-              .then((a) => a.present());
-        }else if(!this.cubeOrSquareLength || !this.cubeOrSquareWidth || !this.cubeOrSquareHeight) {
-             this.$ionic.alertController
             .create({
               header: "提交问题",
-              message: "请填写长、宽、高！",
+              message: "请填写具体的病害情况！",
               buttons: ["确定"],
             })
             .then((a) => a.present());
+        }else if(!this.cubeOrSquareLength || !this.cubeOrSquareWidth || !this.cubeOrSquareHeight) {
+            this.$ionic.alertController
+              .create({
+                header: "提交问题",
+                message: "请填写长、宽、高！",
+                buttons: ["确定"],
+              })
+              .then((a) => a.present());
                 
         }else if(this.cubeOrSquareLength && this.cubeOrSquareWidth && this.cubeOrSquareHeight) {
           this.$ionic.alertController
@@ -390,8 +392,8 @@ export default {
       }
     },
     addRoadProblem() {
-      this.stake =this.stake + "桩"
-      this.relativeLength = this.relativeLength + "米";
+      // this.stake =this.stake + "桩"
+      // this.relativeLength = this.relativeLength + "米";
       this.addRoadProblemForm.position = this.stake + " " + this.stream + "" + this.orientation + " " + this.relativeLength;
       if(this.addRoadProblemForm.potentialHazard){
         this.addRoadProblemForm.potentialHazard="有"
@@ -421,6 +423,8 @@ export default {
       this.addRoadProblemForm.patrolResultId = this.$route.query.patrolResultId
       this.addRoadProblemForm.userId = getStore("id")
 
+      console.log("提交问题 addRoadProblemForm");
+      console.log(this.addRoadProblemForm);
       //为了传图片设置的变量
       var roadHazardId =0;
       var params = this.addRoadProblemForm;
