@@ -321,12 +321,44 @@ export default {
             this.patrolEndBtn = false;
             this.$ionic.alertController
               .create({
-                header: "结束巡查",
-                message: "巡查已结束",
-                buttons: ["确定"],
+                header: "请填写结束位置信息",
+                inputs: [
+                  {
+                    name: "name1",
+                    type: "text",
+                    value: "",
+                    placeholder: "例如:10.234",
+                  },
+                ],
+                buttons: [
+                  {
+                    text: "取消",
+                    handler: () => {
+                      this.patrolBegin();
+                    },
+                  },
+                  {
+                    text: "确定",
+                    handler: (value) => {
+                      if (!value) {
+                        e.preventDefault();
+                      }
+                      this.patrolResult.stakeEndId = value.name1;
+                      this.patrollingBtn = false;
+                      this.$router.push({ path: "/inspection" });
+                    },
+                  },
+                ],
               })
               .then((a) => a.present());
-            this.$router.push({ path: "/inspection" });
+
+            // this.$ionic.alertController
+            //   .create({
+            //     header: "结束巡查",
+            //     message: "巡查已结束",
+            //     buttons: ["确定"],
+            //   })
+            //   .then((a) => a.present());
           }
         });
       } else {
