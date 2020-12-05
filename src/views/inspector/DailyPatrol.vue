@@ -317,6 +317,7 @@ export default {
      */
     addProblem() {
       if (getStore("patrolResultId") !== null) {
+        console.log("///////////////");
         this.$router.push({
           path: "/problem",
           query: { patrolResultId: getStore("patrolResultId") },

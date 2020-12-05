@@ -174,6 +174,7 @@ export default {
   },
   data() {
     return {
+      alertFlag: 0,
       patrollingBtn: false,
       patrolBeginBtn: true,
       problems: {},
@@ -289,13 +290,15 @@ export default {
             this.patrolCarShow = true;
             this.patrolBeginTime = true;
             this.patrolBeginInfo = response.data;
-            this.$ionic.alertController
-              .create({
-                header: "开始巡查",
-                message: "开始巡查",
-                buttons: ["确定"],
-              })
-              .then((a) => a.present());
+            if (this.alertFlag == 0) {
+              this.$ionic.alertController
+                .create({
+                  header: "开始巡查",
+                  message: "开始巡查",
+                  buttons: ["确定"],
+                })
+                .then((a) => a.present());
+            }
           }
         });
       } else {
@@ -326,7 +329,7 @@ export default {
                   {
                     name: "name1",
                     type: "text",
-                    value: "",
+                    value: null,
                     placeholder: "例如:10.234",
                   },
                 ],
@@ -340,12 +343,32 @@ export default {
                   {
                     text: "确定",
                     handler: (value) => {
-                      if (!value) {
-                        e.preventDefault();
+                      // 信息未填提示
+                      if (!value.name1) {
+                        this.$ionic.alertController
+                          .create({
+                            header: "请填写结束位置信息",
+                            buttons: [
+                              {
+                                text: "确定",
+                                handler: () => {
+                                  this.alertFlag = 1;
+                                  this.patrolBegin();
+                                },
+                              },
+                            ],
+                          })
+                          .then((a) => a.present());
+                      } else {
+                        this.patrolResult.stakeEndId = value.name1;
+                        console.log(
+                          typeof this.patrolResult.stakeEndId,
+                          this.patrolResult.stakeEndId,
+                          value
+                        );
+                        this.patrollingBtn = false;
+                        this.$router.push({ path: "/inspection" });
                       }
-                      this.patrolResult.stakeEndId = value.name1;
-                      this.patrollingBtn = false;
-                      this.$router.push({ path: "/inspection" });
                     },
                   },
                 ],
