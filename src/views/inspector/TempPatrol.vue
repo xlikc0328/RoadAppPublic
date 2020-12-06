@@ -360,7 +360,7 @@ export default {
                     name: "name1",
                     type: "text",
                     value: null,
-                    placeholder: "例如:10.234",
+                    placeholder: "例如:26.66",
                   },
                 ],
                 buttons: [
@@ -390,14 +390,16 @@ export default {
                           })
                           .then((a) => a.present());
                       } else {
-                        this.patrolResult.stakeEndId = value.name1;
-                        console.log(
-                          typeof this.patrolResult.stakeEndId,
-                          this.patrolResult.stakeEndId,
-                          value
-                        );
-                        this.patrollingBtn = false;
-                        this.$router.push({ path: "/inspection" });
+                        console.log(value.name1);
+                        this.patrolResult.stakeEndId = value.name1.split(
+                          "."
+                        )[0]; //从弹框获取输入的 结束桩的id
+                        console.log(this.patrolResult);
+                        API.patrolBegin(this.patrolResult).then((response) => {
+                          console.log("**********");
+                          this.patrollingBtn = false;
+                          this.$router.push({ path: "/inspection" });
+                        });
                       }
                     },
                   },
