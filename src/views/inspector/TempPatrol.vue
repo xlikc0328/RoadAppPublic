@@ -56,7 +56,15 @@
       <ion-item>
         <ion-icon name="skip-backward"></ion-icon>
         <ion-label>选择起始桩</ion-label>
-        <ion-select
+        <ion-input
+          type="number"
+          placeholder="如：4.33"
+          style="font-size: 14px; margin-left: 45%"
+          :value="patrolResult.stakeBeginId"
+          @ionChange="patrolResult.stakeBeginId = $event.target.value"
+        ></ion-input>
+
+        <!-- <ion-select
           placeholder="请选择"
           :value="patrolResult.stakeBeginId"
           @ionChange="patrolResult.stakeBeginId = $event.target.value"
@@ -69,7 +77,7 @@
             :value="stake.stakeId"
             >{{ stake.name }}</ion-select-option
           >
-        </ion-select>
+        </ion-select> -->
       </ion-item>
 
       <!-- <ion-item>
@@ -99,7 +107,14 @@
       <ion-item>
         <ion-icon name="car" slot="start"></ion-icon>
         <ion-label>巡查车辆</ion-label>
-        <ion-select
+        <ion-input
+          type="text"
+          placeholder="如：辽B 3653"
+          style="font-size: 14px; margin-left: 50%"
+          :value="patrolResult.patrolCar"
+          @ionChange="patrolResult.patrolCar = $event.target.value"
+        ></ion-input>
+        <!-- <ion-select
           placeholder="选择车辆"
           :value="patrolResult.patrolCar"
           @ionChange="patrolResult.patrolCar = $event.target.value"
@@ -112,7 +127,7 @@
             :value="patrolCar.carNumber"
             >{{ patrolCar.carNumber }}</ion-select-option
           >
-        </ion-select>
+        </ion-select> -->
       </ion-item>
 
       <ion-item>
@@ -202,7 +217,7 @@ export default {
         nationalHighwayId: null,
         roadSectionId: null,
         patrolCar: null,
-        stakeEndId: null,
+        stakeEndId: "29",
         stakeBeginId: null,
         // 需要改动成当前登录用户所属部门的ID
         patrolOrganizationId: getStore("deptId"),
@@ -283,6 +298,9 @@ export default {
      */
     patrolBegin() {
       this.patrolResult.nationalHighwayId = this.nationalHighwayId;
+      this.patrolResult.stakeBeginId = this.patrolResult.stakeBeginId.split(
+        "."
+      )[0];
       const params = this.patrolResult;
       if (
         !(
