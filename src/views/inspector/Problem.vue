@@ -225,11 +225,13 @@ export default {
       const params = {
         patrolResultId: this.$route.query.patrolResultId
       }
-      console.log("this.$route.query.patrolResultId")
-      console.log(this.$route.query.patrolResultId)
+      console.log("patrolResultId"+this.$route.query.patrolResultId)
       API.getRoadSection(params).then(response => {
         if(response.statusCode === 1) {
-          this.roadInfo = response.data
+          console.log("getRoadSection response.data");
+          console.log(response.data);
+          this.roadInfo = response.data;
+          console.log(this.roadInfo);
         }
       })
     },
@@ -276,7 +278,23 @@ export default {
       this.clearAll()
     },
     clickHandle() {
-      if(this.flag == 1 || this.flag == 0) {  
+      if(!this.stake || !this.stream || !this.orientation) {
+        this.$ionic.alertController
+            .create({
+              header: "提交问题",
+              message: "请填写具体的位置信息！",
+              buttons: ["确定"],
+            })
+            .then((a) => a.present());
+      }else if(!this.addRoadProblemForm.hazardStatus) {
+        this.$ionic.alertController
+            .create({
+              header: "提交问题",
+              message: "请填写病害类型！",
+              buttons: ["确定"],
+            })
+            .then((a) => a.present());
+      }else if(this.flag == 1 || this.flag == 0) {  
         if(this.flag == 0 && !this.cubeOrSquareLength && !this.cubeOrSquareWidth && !this.cubeOrSquareHeight) {
           this.$ionic.alertController
             .create({
@@ -423,8 +441,6 @@ export default {
       this.addRoadProblemForm.patrolResultId = this.$route.query.patrolResultId
       this.addRoadProblemForm.userId = getStore("id")
 
-      console.log("提交问题 addRoadProblemForm");
-      console.log(this.addRoadProblemForm);
       //为了传图片设置的变量
       var roadHazardId =0;
       var params = this.addRoadProblemForm;

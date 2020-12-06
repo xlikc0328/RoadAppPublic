@@ -19,10 +19,7 @@
           <ion-grid>
             <ion-row>
               <ion-col>
-                <ion-input type="number" placeholder="如：12.3" style="font-size:14px;" :value="stake" @ionChange="stake=$event.target.value"></ion-input>
-                <!-- <ion-select placeholder="桩.米" :value="stake" @ionChange="stake=$event.target.value" style="display:inline-block;font-size:14px;text-align:center" ok-text="确定" cancel-text="取消">
-                  <ion-select-option v-for="(stake, index) in stakes" :key="index" :value=stake.stakeId>{{ stake.name }}</ion-select-option>
-                </ion-select> -->
+                <ion-input type="number" placeholder="如：12.3" style="font-size:14px;" :value="stake" @ionChange="stake=$event.target.value"></ion-input>           
               </ion-col>
 
               <ion-col>
@@ -39,10 +36,7 @@
                 </ion-select>
               </ion-col>
 
-              <!-- <ion-col>
-                <ion-input type="number" placeholder="米" style="font-size:14px;" :value="relativeLength" @ionChange="relativeLength=$event.target.value"></ion-input>
-                <span style=" position: absolute; top: 1%; right: 6%;color: #adadad; display: table-cell;white-space: nowrap; padding: 7px 10px;">米</span>
-              </ion-col> -->
+       
             </ion-row>
           </ion-grid>
           
@@ -163,6 +157,15 @@ export default {
   },
   data: function () {
     return {
+      roadHazardId: this.$route.query.roadHazardId,
+      patrolResultId: this.$route.query.patrolResultId,
+      hazardImgs:[],
+      dataProblem: {},
+      hazardName: {},
+      sizeTypeName:{},
+      roadInfo: {},
+      stake1: '123',
+
       hazardList:[],
       UnitList:[],
       imgList: [],
@@ -218,6 +221,7 @@ export default {
     this.getAllUnit()
     this.listStake()
     this.getRoadSection()
+    this.getcheckRoadProblem()
   },
 
   methods: {
@@ -232,6 +236,19 @@ export default {
           console.log(response.data);
           this.roadInfo = response.data
         }
+      })
+    },
+    getcheckRoadProblem(){
+      var params = {
+        roadHazardId : this.$route.query.roadHazardId,
+      }
+      API.getcheckRoadProblem(params).then(response => {
+        this.hazardName = response.hazardName 
+        this.dataProblem = response.data
+        this.hazardImgs = response.hazardImgs
+        this.sizeTypeName = response.sizeTypeName
+
+        this.stake = this.dataProblem.position
       })
     },
     listStake() {
@@ -277,7 +294,23 @@ export default {
       this.clearAll()
     },
     clickHandle() {
-      if(this.flag == 1 || this.flag == 0) {  
+        if(!this.stake || !this.stream || !this.orientation) {
+        this.$ionic.alertController
+            .create({
+              header: "提交问题",
+              message: "请填写具体的位置信息！",
+              buttons: ["确定"],
+            })
+            .then((a) => a.present());
+      }else if(!this.addRoadProblemForm.hazardStatus) {
+        this.$ionic.alertController
+            .create({
+              header: "提交问题",
+              message: "请填写病害类型！",
+              buttons: ["确定"],
+            })
+            .then((a) => a.present());
+      }else if(this.flag == 1 || this.flag == 0) {  
         if(this.flag == 0 && !this.cubeOrSquareLength && !this.cubeOrSquareWidth && !this.cubeOrSquareHeight) {
           this.$ionic.alertController
             .create({

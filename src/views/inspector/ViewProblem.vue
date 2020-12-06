@@ -56,7 +56,7 @@
         暂无图片
       </ion-label>
     </ion-card>
-    <ion-button expand="block" color="primary" @click="editProblem(roadHazardId,patrolResultId)">编辑</ion-button>
+    <ion-button expand="block" color="primary" @click="editProblem(roadHazardId,patrolResultId)">修改</ion-button>
     <ion-button expand="block" color="danger" @click="corfirmEnd">删除问题</ion-button>
     <TabBar />
   </div>

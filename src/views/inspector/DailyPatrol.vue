@@ -75,14 +75,12 @@
           v-if="problemCount === null"
           class="label-content"
           color="primary"
-          @click="addProblem"
           >暂未发现问题,有待添加.</ion-label
         >
         <ion-label
           v-if="!problemCount === null"
           class="label-content"
           color="primary"
-          @click="addProblem"
           >发现问题 ({{ problemCount }}处)</ion-label
         >
       </ion-item>

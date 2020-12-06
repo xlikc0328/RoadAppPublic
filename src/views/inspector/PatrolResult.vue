@@ -163,8 +163,6 @@ export default {
         path: "/view_problem",
         query: { roadHazardId: roadHazardId, patrolResultId: patrolResultId },
       });
-      console.log("11查看问题patrolResultId");
-      console.log(patrolResultId);
     },
 
     /**
