@@ -59,7 +59,7 @@
         <ion-input
           type="number"
           placeholder="如：4.33"
-          style="font-size: 14px; margin-left: 45%"
+          style="font-size: 14px; margin-left: 23%"
           :value="patrolResult.stakeBeginId"
           @ionChange="patrolResult.stakeBeginId = $event.target.value"
         ></ion-input>
@@ -110,7 +110,7 @@
         <ion-input
           type="text"
           placeholder="如：辽B 3653"
-          style="font-size: 14px; margin-left: 50%"
+          style="font-size: 14px; margin-left: 29%"
           :value="patrolResult.patrolCar"
           @ionChange="patrolResult.patrolCar = $event.target.value"
         ></ion-input>
