@@ -7,9 +7,10 @@
         <ion-icon name="flashlight" slot="start"></ion-icon>
         <ion-label>
           巡查路段 {{ patrolInfo.nationalHighwayName }}
-          {{ patrolInfo.roadSectionName }} {{ patrolInfo.beginStake }}~{{
-            patrolInfo.endStake
-          }}</ion-label
+          {{ patrolInfo.roadSectionName }} {{ patrolInfo.beginStake }}~<span
+            v-if="this.tempFlag == 1"
+            >暂无</span
+          ><span v-else>{{ patrolInfo.endStake }}</span></ion-label
         >
       </ion-item>
 
@@ -110,6 +111,7 @@ export default {
   },
   data() {
     return {
+      tempFlag: this.$route.query.tempFlag,
       problems: [],
       problemCount: null,
       patrolEndBtn: true,
@@ -170,10 +172,25 @@ export default {
      * 查看问题
      */
     viewProblem(roadHazardId, patrolResultId) {
-      this.$router.push({
-        path: "/view_problem",
-        query: { roadHazardId: roadHazardId, patrolResultId: patrolResultId },
-      });
+      if (this.tempFlag == 1) {
+        this.$router.push({
+          path: "/view_problem",
+          query: {
+            roadHazardId: roadHazardId,
+            patrolResultId: patrolResultId,
+            tempFlag: 1,
+          },
+        });
+      } else {
+        this.$router.push({
+          path: "/view_problem",
+          query: {
+            roadHazardId: roadHazardId,
+            patrolResultId: patrolResultId,
+            tempFlag: 0,
+          },
+        });
+      }
     },
     /**
      * 开始巡查
@@ -312,7 +329,10 @@ export default {
       if (getStore("patrolResultId") !== null) {
         this.$router.push({
           path: "/problem",
-          query: { patrolResultId: getStore("patrolResultId") },
+          query: {
+            patrolResultId: getStore("patrolResultId"),
+            tempFlag: this.tempFlag,
+          },
         });
       } else {
         this.$ionic.alertController

@@ -201,6 +201,7 @@ export default {
   },
   data() {
     return {
+      tempFlag: 1,
       alertFlag: 0,
       patrollingBtn: false,
       patrolBeginBtn: true,
@@ -311,7 +312,6 @@ export default {
         )
       ) {
         setStore("patrolResult", this.patrolResult);
-        console.log();
         API.patrolBegin(params).then((response) => {
           if (response.statusCode === 1) {
             this.patrolResultId = response.data.patrolResultId;
@@ -441,7 +441,10 @@ export default {
       if (getStore("patrolResultId") !== null) {
         this.$router.push({
           path: "/problem",
-          query: { patrolResultId: getStore("patrolResultId") },
+          query: {
+            patrolResultId: getStore("patrolResultId"),
+            tempFlag: this.tempFlag,
+          },
         });
       } else {
         this.$ionic.alertController

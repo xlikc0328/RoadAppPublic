@@ -13,7 +13,10 @@
             {{ roadInfo.nationalHighwayName }} {{ roadInfo.roadSectionName }}
           </p>
           <p style="text-align: right">
-            {{ roadInfo.beginStake }}~{{ roadInfo.endStake }}
+            {{ roadInfo.beginStake }}~<span v-if="this.tempFlag == 1"
+              >暂无</span
+            >
+            <span v-else>{{ roadInfo.endStake }}</span>
           </p>
         </ion-col>
       </ion-item>
@@ -69,7 +72,6 @@
             </ion-col>
           </ion-row>
         </ion-grid>
-
       </ion-item>
 
       <ion-item>
@@ -163,7 +165,6 @@
             addRoadProblemForm.potentialHazard = $event.target.checked
           "
         ></ion-toggle>
-
       </ion-item>
 
       <ion-item>
@@ -241,6 +242,7 @@ export default {
   },
   data: function () {
     return {
+      tempFlag: this.$route.query.tempFlag,
       hazardList: [],
       UnitList: [],
       imgList: [],
@@ -498,12 +500,7 @@ export default {
     },
     addRoadProblem() {
       this.addRoadProblemForm.position =
-        this.stake +
-        " " +
-        this.stream +
-        "" +
-        this.orientation +
-        " ";
+        this.stake + " " + this.stream + "" + this.orientation + " ";
       if (this.addRoadProblemForm.potentialHazard) {
         this.addRoadProblemForm.potentialHazard = "有";
       } else {
@@ -575,10 +572,23 @@ export default {
         }
       });
       // this.$router.go(-1)
-      this.$router.push({
-        path: "/patrol-result",
-        query: { patrolResultId: this.addRoadProblemForm.patrolResultId },
-      });
+      if (this.tempFlag == 1) {
+        this.$router.push({
+          path: "/patrol-result",
+          query: {
+            patrolResultId: this.addRoadProblemForm.patrolResultId,
+            tempFlag: 1,
+          },
+        });
+      } else {
+        this.$router.push({
+          path: "/patrol-result",
+          query: {
+            patrolResultId: this.addRoadProblemForm.patrolResultId,
+            tempFlag: 0,
+          },
+        });
+      }
     },
     getAllhazard() {
       API.getAllhazard().then((response) => {
