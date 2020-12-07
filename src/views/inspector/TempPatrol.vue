@@ -20,7 +20,7 @@
             >{{ highway.highwayName }}</ion-select-option
           >
         </ion-select>
-        <ion-select
+        <!-- <ion-select
           placeholder="请选择路段"
           :value="patrolResult.roadSectionId"
           @ionChange="patrolResult.roadSectionId = $event.target.value"
@@ -33,7 +33,7 @@
             :value="roadSection.roadSectionId"
             >{{ roadSection.name }}</ion-select-option
           >
-        </ion-select>
+        </ion-select> -->
       </ion-item>
       <!-- <ion-item>
         <ion-icon name="locate" slot="start"></ion-icon>
@@ -302,10 +302,12 @@ export default {
       const params = this.patrolResult;
       if (
         !(
-          this.patrolResult.roadSectionId === null ||
+          // this.patrolResult.roadSectionId === null ||
           // this.patrolResult.stakeEndId === null ||
-          this.patrolResult.stakeBeginId === null ||
-          this.patrolResult.patrolCar === null
+          (
+            this.patrolResult.stakeBeginId === null ||
+            this.patrolResult.patrolCar === null
+          )
         )
       ) {
         this.patrolResult.nationalHighwayId = this.nationalHighwayId;
