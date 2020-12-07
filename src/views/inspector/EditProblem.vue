@@ -295,11 +295,9 @@ export default {
     //获取问题的所有数据
     getcheckRoadProblem(){
       var params = {
-        roadHazardId : this.$route.query.roadHazardId,
+        roadHazardId : this.roadHazardId,
       }
       API.getcheckRoadProblem(params).then(response => {
-        console.log("response");
-        console.log(response);     
         this.dataProblem = response.data
         //图片
         this.hazardImgs = response.hazardImgs
@@ -343,10 +341,8 @@ export default {
         //安全隐患
         if(response.data.potentialHazard == "有") {
             this.addRoadProblemForm.potentialHazard = true
-            console.log(this.addRoadProblemForm.potentialHazard);
         }else {
             this.addRoadProblemForm.potentialHazard = false
-            console.log(this.addRoadProblemForm.potentialHazard);
         }
         //病害描述
         this.addRoadProblemForm.description = response.data.description
@@ -557,12 +553,51 @@ export default {
       this.addRoadProblemForm.patrolResultId = this.$route.query.patrolResultId
       this.addRoadProblemForm.userId = getStore("id")
 
+
+      
+    //   var ajax = new $ax("/roadhazard/updateRoadProblem?addRoadProblemForm="+parseInt($("#addRoadProblemForm").val(
+    //       "&roadHazardId="+this.$route.query.roadHazardId+
+    //       "&position='"+this.addRoadProblemForm.position+
+    //       "'&hazardStatus="+this.addRoadProblemForm.hazardStatus+
+    //       "&sizeType="+this.addRoadProblemForm.sizeType+
+    //       "&specificSize="+this.addRoadProblemForm.specificSize+
+    //       "&potentialHazard="+this.addRoadProblemForm.potentialHazard+
+    //       "&description='"+this.addRoadProblemForm.description+
+    //       "'&longitude="+this.addRoadProblemForm.longitude+
+    //       "&latitude="+this.addRoadProblemForm.latitude+
+    //       "&patrolResultId="+this.addRoadProblemForm.patrolResultId+
+    //       "&userId="+this.addRoadProblemForm.userId
+    //   )));
+
+     
+
+        var params={
+              'roadHazardId': parseInt(this.$route.query.roadHazardId)  ,
+             'position': this.addRoadProblemForm.position ,
+             'hazardStatus':parseInt(this.addRoadProblemForm.hazardStatus) ,
+             'sizeType':parseInt(this.addRoadProblemForm.sizeType) ,
+             'specificSize': this.addRoadProblemForm.specificSize,
+             'potentialHazard': this.addRoadProblemForm.potentialHazard,
+             'description': this.addRoadProblemForm.description ,
+             'longitude':this.addRoadProblemForm.longitude ,
+              'latitude': this.addRoadProblemForm.latitude ,
+              'patrolResultId': parseInt(this.addRoadProblemForm.patrolResultId) ,
+             'userId': this.addRoadProblemForm.userId
+        }
+   // http://47.99.65.198:8020/roadhazard/updateOneRoadProblem
+// 'http://localhost:8020/roadhazard/updateOneRoadProblem'
+
+
+
       //为了传图片设置的变量
       var roadHazardId =0;
-      var params = this.addRoadProblemForm;
+    //   var params = {
+    //       roadHazardId: this.$route.query.roadHazardId,
+    //       addRoadProblemForm: this.addRoadProblemForm
+    //   }
       console.log("修改问题传的params");
       console.log(params);
-      API.addRoadProblem(params).then(response =>{
+      API.updateOneRoadProblem(params).then(response =>{
         this.$ionic.alertController
             .create({
               header: '修改问题',
@@ -573,7 +608,7 @@ export default {
         for(let i=0;i<this.imgList.length;i++){
         let param = new FormData();
         param.append("file", this.imgList[i].file);
-        param.append("roadHazardId",roadHazardId)
+        param.append("roadHazardId",roadHazardId);
         let config = {
           headers: { "Content-Type": "multipart/form-data" }, 
         };
