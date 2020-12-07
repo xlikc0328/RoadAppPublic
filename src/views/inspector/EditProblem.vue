@@ -15,11 +15,10 @@
       </ion-item>
       <ion-item>
         <ion-label style="display:inline-block;width:18%">位置</ion-label>
-        <!-- <div style="display:inline-block;width:82%"> -->
           <ion-grid>
             <ion-row>
               <ion-col>
-                <ion-input type="number" placeholder="如：12.3" style="font-size:14px;" :value="stake" @ionChange="stake=$event.target.value"></ion-input>           
+                <ion-input placeholder="如：12.3" style="font-size:14px;" :value="stake" @ionChange="stake=$event.target.value"></ion-input>           
               </ion-col>
 
               <ion-col>
@@ -51,16 +50,16 @@
       </ion-item>
 
       <ion-segment>
-        <ion-segment-button value="cube" checked="true" @click="handleCube">
+        <ion-segment-button value="cube" checked="volumeCheck" @click="handleCube">
           <ion-label>体积</ion-label>
         </ion-segment-button>
-        <ion-segment-button value="square" @click="handleSquare" >
+        <ion-segment-button value="square" checked="areaCheck" @click="handleSquare" >
           <ion-label>面积</ion-label>
         </ion-segment-button>
-        <ion-segment-button value="length" @click="handleLength">
+        <ion-segment-button value="length" checked="lengthCheck" @click="handleLength">
           <ion-label>长度</ion-label>
         </ion-segment-button>
-        <ion-segment-button value="count" @click="handleCount">
+        <ion-segment-button value="count" checked="numberCheck" @click="handleCount">
           <ion-label>数量</ion-label>
         </ion-segment-button>
       </ion-segment>
@@ -93,14 +92,13 @@
       <ion-item>
         <ion-label>是否存在安全隐患</ion-label>
       
-        <ion-toggle @ionChange="addRoadProblemForm.potentialHazard=$event.target.checked"></ion-toggle>
+        <ion-toggle checked="addRoadProblemForm.potentialHazard" @ionChange="addRoadProblemForm.potentialHazard=$event.target.checked"></ion-toggle>
      
-        <!-- <ion-toggle color="danger" checked ="true"  @ionChange="addRoadProblemForm.potentialHazarad=$event.target.value"></ion-toggle> -->
       </ion-item>
 
       <ion-item>
         <ion-label position="floating">请输入病害描述</ion-label>
-        <ion-textarea  :value="addRoadProblemForm.description"  @ionChange="addRoadProblemForm.description=$event.target.value"></ion-textarea>
+        <ion-textarea :value="addRoadProblemForm.description"  @ionChange="addRoadProblemForm.description=$event.target.value"></ion-textarea>
       </ion-item>
     </ion-card>
 
@@ -164,8 +162,6 @@ export default {
       hazardName: {},
       sizeTypeName:{},
       roadInfo: {},
-      stake1: '123',
-
       hazardList:[],
       UnitList:[],
       imgList: [],
@@ -177,11 +173,16 @@ export default {
       orientation:'',//侧
       stream: '',//行
       flag: 0,//0代表已选，1代表体积未选，2代表面积未选，3代表长度未选，4代表数量未选
-      relativeLength:'',
       cubeOrSquare: true,
       square: false,
       lengthOrNumber: false,
       length: false,
+
+      volumeCheck: false,
+      areaCheck: false,
+      lengthCheck: false,
+      numberCheck: false,
+
       cubeOrSquareLength: null,
       cubeOrSquareWidth: null,
       cubeOrSquareHeight: null,
@@ -190,15 +191,15 @@ export default {
       lengthOrNumberNumber: null,
 
       addRoadProblemForm:{
-        //位置（桩+侧+米）
+        //位置（桩+行+侧）
         position:"",
         //病害类型
         hazardStatus:"",
-        //类型尺寸
+        //尺寸类型
         sizeType:"",
         //具体尺寸
         specificSize:"",
-        //潜在危险
+        //安全隐患
         potentialHazard:"",
         //描述
         description:"",
@@ -216,7 +217,7 @@ export default {
   },
 
   mounted(){
-    this.$refs.header.title = '编辑问题'
+    this.$refs.header.title = '修改问题'
     this.getAllhazard()
     this.getAllUnit()
     this.listStake()
@@ -229,26 +230,68 @@ export default {
       const params = {
         patrolResultId: this.$route.query.patrolResultId
       }
-      console.log("patrolResultId"+this.$route.query.patrolResultId)
       API.getRoadSection(params).then(response => {
         if(response.statusCode === 1) {
-          console.log("getRoadSection  response.data");
-          console.log(response.data);
           this.roadInfo = response.data
         }
       })
     },
+    //获取问题的所有数据
     getcheckRoadProblem(){
       var params = {
         roadHazardId : this.$route.query.roadHazardId,
       }
       API.getcheckRoadProblem(params).then(response => {
-        this.hazardName = response.hazardName 
+        console.log("response");
+        console.log(response);     
         this.dataProblem = response.data
+        //图片
         this.hazardImgs = response.hazardImgs
-        this.sizeTypeName = response.sizeTypeName
-
-        this.stake = this.dataProblem.position
+        //尺寸类型
+        this.sizeTypeName = response.sizeTypeName.hazard_unit_name
+        if(this.sizeTypeName == "体积") {
+            this.volumeCheck = true;
+            this.handleCube();
+        }else if(this.sizeTypeName == "面积") {
+            this.areaCheck = true;
+            this.handleSquare();
+        }else if(this.sizeTypeName == "长度") {
+            this.lengthCheck = true
+            this.handleLength();
+        }else {
+            this.numberCheck = true
+            this.handleCount();
+        }
+        //具体尺寸
+        this.addRoadProblemForm.specificSize = response.data.specificSize
+        if(this.volumeCheck) {
+            this.cubeOrSquareLength = this.addRoadProblemForm.specificSize.split("*")[0]
+            this.cubeOrSquareWidth = this.addRoadProblemForm.specificSize.split("*")[1]
+            this.cubeOrSquareHeight = this.addRoadProblemForm.specificSize.split("*")[2]
+        }else if(this.areaCheck) {
+            this.cubeOrSquareLength = this.addRoadProblemForm.specificSize.split("*")[0]
+            this.cubeOrSquareWidth = this.addRoadProblemForm.specificSize.split("*")[1]
+        }else if(this.lengthCheck) {
+            this.lengthOrNumberLength = this.addRoadProblemForm.specificSize
+        }else {
+            this.lengthOrNumberNumber = this.addRoadProblemForm.specificSize
+        }
+        //桩
+        this.stake = this.dataProblem.position.split(" ")[0]
+        //行
+        this.stream = this.dataProblem.position.split(" ")[1].slice(0,2)
+        //侧
+        this.orientation = this.dataProblem.position.split(" ")[1].slice(2,4)
+        //病害类型
+        this.addRoadProblemForm.hazardStatus = response.data.hazardStatus
+        //安全隐患
+        if(response.data.potentialHazard == "有") {
+            this.addRoadProblemForm.potentialHazard = true
+        }else {
+            this.addRoadProblemForm.potentialHazard = false
+        }
+        //病害描述
+        this.addRoadProblemForm.description = response.data.description
       })
     },
     listStake() {
@@ -426,9 +469,7 @@ export default {
       }
     },
     addRoadProblem() {
-      // this.stake =this.stake + "桩"
-      // this.relativeLength = this.relativeLength + "米";
-      this.addRoadProblemForm.position = this.stake + " " + this.stream + "" + this.orientation + " " + this.relativeLength;
+      this.addRoadProblemForm.position = this.stake + " " + this.stream + "" + this.orientation + " ";
       if(this.addRoadProblemForm.potentialHazard){
         this.addRoadProblemForm.potentialHazard="有"
       }else{
@@ -457,16 +498,16 @@ export default {
       this.addRoadProblemForm.patrolResultId = this.$route.query.patrolResultId
       this.addRoadProblemForm.userId = getStore("id")
 
-      console.log("提交问题 addRoadProblemForm");
-      console.log(this.addRoadProblemForm);
       //为了传图片设置的变量
       var roadHazardId =0;
       var params = this.addRoadProblemForm;
+      console.log("修改问题传的params");
+      console.log(params);
       API.addRoadProblem(params).then(response =>{
         this.$ionic.alertController
             .create({
-              header: '巡查问题',
-              message: '添加成功, 若无问题请点击结束巡查.',
+              header: '修改问题',
+              message: '修改成功, 若无问题请点击结束巡查.',
               buttons: ['确定'],
             }).then(a => a.present())
         roadHazardId = response
@@ -490,6 +531,7 @@ export default {
     getAllhazard(){
       API.getAllhazard().then(response =>{
            this.hazardList = response.data;
+           console.log(this.hazardList);
       })
     },
     getAllUnit(){

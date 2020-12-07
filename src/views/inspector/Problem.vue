@@ -30,9 +30,6 @@
                 :value="stake"
                 @ionChange="stake = $event.target.value"
               ></ion-input>
-              <!-- <ion-select placeholder="桩.米" :value="stake" @ionChange="stake=$event.target.value" style="display:inline-block;font-size:14px;text-align:center" ok-text="确定" cancel-text="取消">
-                  <ion-select-option v-for="(stake, index) in stakes" :key="index" :value=stake.stakeId>{{ stake.name }}</ion-select-option>
-                </ion-select> -->
             </ion-col>
 
             <ion-col>
@@ -70,15 +67,9 @@
                 <ion-select-option>右侧</ion-select-option>
               </ion-select>
             </ion-col>
-
-            <!-- <ion-col>
-                <ion-input type="number" placeholder="米" style="font-size:14px;" :value="relativeLength" @ionChange="relativeLength=$event.target.value"></ion-input>
-                <span style=" position: absolute; top: 1%; right: 6%;color: #adadad; display: table-cell;white-space: nowrap; padding: 7px 10px;">米</span>
-              </ion-col> -->
           </ion-row>
         </ion-grid>
 
-        <!-- </div> -->
       </ion-item>
 
       <ion-item>
@@ -173,7 +164,6 @@
           "
         ></ion-toggle>
 
-        <!-- <ion-toggle color="danger" checked ="true"  @ionChange="addRoadProblemForm.potentialHazarad=$event.target.value"></ion-toggle> -->
       </ion-item>
 
       <ion-item>
@@ -262,7 +252,6 @@ export default {
       orientation: "", //侧
       stream: "", //行
       flag: 0, //0代表已选，1代表体积未选，2代表面积未选，3代表长度未选，4代表数量未选
-      relativeLength: "",
       cubeOrSquare: true,
       square: false,
       lengthOrNumber: false,
@@ -313,13 +302,11 @@ export default {
       const params = {
         patrolResultId: this.$route.query.patrolResultId,
       };
-      console.log("patrolResultId" + this.$route.query.patrolResultId);
       API.getRoadSection(params).then((response) => {
         if (response.statusCode === 1) {
           console.log("getRoadSection response.data");
           console.log(response.data);
           this.roadInfo = response.data;
-          console.log(this.roadInfo);
         }
       });
     },
@@ -510,16 +497,13 @@ export default {
       }
     },
     addRoadProblem() {
-      // this.stake =this.stake + "桩"
-      // this.relativeLength = this.relativeLength + "米";
       this.addRoadProblemForm.position =
         this.stake +
         " " +
         this.stream +
         "" +
         this.orientation +
-        " " +
-        this.relativeLength;
+        " ";
       if (this.addRoadProblemForm.potentialHazard) {
         this.addRoadProblemForm.potentialHazard = "有";
       } else {
@@ -561,6 +545,8 @@ export default {
       //为了传图片设置的变量
       var roadHazardId = 0;
       var params = this.addRoadProblemForm;
+      console.log("params");
+      console.log(params);
       API.addRoadProblem(params).then((response) => {
         this.$ionic.alertController
           .create({
@@ -597,6 +583,8 @@ export default {
     getAllhazard() {
       API.getAllhazard().then((response) => {
         this.hazardList = response.data;
+        console.log("hazardList");
+        console.log(this.hazardList);
       });
     },
     getAllUnit() {

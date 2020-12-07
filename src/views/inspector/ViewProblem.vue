@@ -104,8 +104,6 @@ export default {
         patrolResultId: this.$route.query.patrolResultId
       }
       API.getRoadSection(params).then(response => {
-        console.log("response");
-        console.log(response);
         if(response.statusCode === 1) {
           this.roadInfo = response.data
         }
@@ -116,6 +114,7 @@ export default {
         roadHazardId : this.$route.query.roadHazardId,
       }
       API.getcheckRoadProblem(params).then(response => {
+        console.log(response);
         this.hazardName = response.hazardName 
         this.dataProblem = response.data
         this.hazardImgs = response.hazardImgs
