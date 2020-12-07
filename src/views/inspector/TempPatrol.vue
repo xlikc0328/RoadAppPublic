@@ -310,6 +310,8 @@ export default {
           this.patrolResult.patrolCar === null
         )
       ) {
+        setStore("patrolResult", this.patrolResult);
+        console.log();
         API.patrolBegin(params).then((response) => {
           if (response.statusCode === 1) {
             this.patrolResultId = response.data.patrolResultId;
@@ -346,66 +348,62 @@ export default {
      * 结束巡查
      */
     patrolEnd() {
-      const params = { patrolResultId: getStore("patrolResultId") };
       if (getStore("patrolResultId") !== null) {
+        this.$ionic.alertController
+          .create({
+            header: "请填写结束位置信息",
+            inputs: [
+              {
+                name: "name1",
+                type: "text",
+                value: null,
+                placeholder: "例如:26.66",
+              },
+            ],
+            buttons: [
+              {
+                text: "取消",
+              },
+              {
+                text: "确定",
+                handler: (value) => {
+                  // 信息未填提示
+                  if (!value.name1) {
+                    this.$ionic.alertController
+                      .create({
+                        header: "请填写结束位置信息",
+                        buttons: [
+                          {
+                            text: "确定",
+                            handler: () => {
+                              this.alertFlag = 1;
+                            },
+                          },
+                        ],
+                      })
+                      .then((a) => a.present());
+                  } else {
+                    this.patrolResult.stakeEndId = value.name1.split(".")[0]; //从弹框获取输入的 结束桩的id
+                    const params = {
+                      patrolResultId: getStore("patrolResultId"),
+                      stakeEndId: this.patrolResult.stakeEndId,
+                    };
+
+                    API.patrolEnd(params).then((response) => {
+                      this.patrollingBtn = false;
+                      this.$router.push({ path: "/inspection" });
+                    });
+                  }
+                },
+              },
+            ],
+          })
+          .then((a) => a.present());
+
         API.patrolEnd(params).then((response) => {
           if (response.statusCode === 1) {
             removeStore("patrolResultId");
             this.patrolEndBtn = false;
-            this.$ionic.alertController
-              .create({
-                header: "请填写结束位置信息",
-                inputs: [
-                  {
-                    name: "name1",
-                    type: "text",
-                    value: null,
-                    placeholder: "例如:26.66",
-                  },
-                ],
-                buttons: [
-                  {
-                    text: "取消",
-                    handler: () => {
-                      this.patrolBegin();
-                    },
-                  },
-                  {
-                    text: "确定",
-                    handler: (value) => {
-                      // 信息未填提示
-                      if (!value.name1) {
-                        this.$ionic.alertController
-                          .create({
-                            header: "请填写结束位置信息",
-                            buttons: [
-                              {
-                                text: "确定",
-                                handler: () => {
-                                  this.alertFlag = 1;
-                                  this.patrolBegin();
-                                },
-                              },
-                            ],
-                          })
-                          .then((a) => a.present());
-                      } else {
-                        console.log(value.name1);
-                        this.patrolResult.stakeEndId = value.name1.split(
-                          "."
-                        )[0]; //从弹框获取输入的 结束桩的id
-                        console.log(this.patrolResult);
-                        API.patrolBegin(this.patrolResult).then((response) => {
-                          console.log("**********");
-                          this.patrollingBtn = false;
-                          this.$router.push({ path: "/inspection" });
-                        });
-                      }
-                    },
-                  },
-                ],
-              })
-              .then((a) => a.present());
 
             // this.$ionic.alertController
             //   .create({

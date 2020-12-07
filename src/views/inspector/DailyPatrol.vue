@@ -279,7 +279,10 @@ export default {
      * 结束巡查
      */
     patrolEnd() {
-      const params = { patrolResultId: getStore("patrolResultId") };
+      const params = {
+        patrolResultId: getStore("patrolResultId"),
+        stakeEndId: this.patrolInfo.stakeEndId,
+      };
       if (getStore("patrolResultId") !== null) {
         API.patrolEnd(params).then((response) => {
           if (response.statusCode === 1) {

@@ -115,6 +115,17 @@ export default {
       patrolEndBtn: true,
       patrolInfo: {},
       patrolResultId: null,
+      patrolResult: {
+        nationalHighwayId: null,
+        roadSectionId: null,
+        patrolCar: null,
+        stakeEndId: null,
+        stakeBeginId: null,
+        // 需要改动成当前登录用户所属部门的ID
+        patrolOrganizationId: getStore("deptId"),
+        // 需要改动成当前登录用户的ID
+        inspectorId: getStore("id"),
+      },
     };
   },
   mounted() {
@@ -164,26 +175,102 @@ export default {
         query: { roadHazardId: roadHazardId, patrolResultId: patrolResultId },
       });
     },
-
+    /**
+     * 开始巡查
+     */
+    patrolBegin() {
+      this.patrolEndBtn = true;
+      console.log("继续巡查");
+    },
     /**
      * 巡查开始二次确认
      */
     confirmEnd() {
-      this.$ionic.alertController
-        .create({
-          header: "日常巡查",
-          message: "确定要结束日常巡查吗？",
-          buttons: [
-            {
-              text: "确定",
-              handler: () => {
-                this.patrolEnd();
+      if (this.patrolInfo.endStake === "暂无终点桩") {
+        this.patrolEndBtn = false;
+        // 弹框输入结束桩位置
+        this.$ionic.alertController
+          .create({
+            header: "请填写结束位置信息",
+            inputs: [
+              {
+                name: "name1",
+                type: "text",
+                value: null,
+                placeholder: "例如:26.66",
               },
-            },
-            { text: "取消" },
-          ],
-        })
-        .then((a) => a.present());
+            ],
+            buttons: [
+              {
+                text: "取消",
+                handler: () => {
+                  this.patrolEndBtn = true;
+                },
+              },
+              {
+                text: "确定",
+                handler: (value) => {
+                  // 信息未填提示
+                  if (!value.name1) {
+                    this.$ionic.alertController
+                      .create({
+                        header: "请填写结束位置信息",
+                        buttons: [
+                          {
+                            text: "确定",
+                            handler: () => {
+                              this.alertFlag = 1;
+                            },
+                          },
+                        ],
+                      })
+                      .then((a) => a.present());
+                  } else {
+                    this.patrolInfo.stakeEndId = parseInt(
+                      value.name1.split(".")[0]
+                    );
+                    const params = {
+                      patrolResultId: getStore("patrolResultId"),
+                      stakeEndId: this.patrolInfo.stakeEndId,
+                    };
+
+                    API.patrolEnd(params).then((response) => {
+                      this.patrollingBtn = false;
+                      removeStore("patrolResultId");
+                      this.$router.push({ path: "/inspection" });
+                    });
+                  }
+                },
+              },
+            ],
+          })
+          .then((a) => a.present());
+      } else {
+        //无 结束桩 为日常巡查
+        this.$ionic.alertController
+          .create({
+            header: "日常巡查",
+            message: "确定要结束日常巡查吗？",
+            buttons: [
+              {
+                text: "确定",
+                handler: () => {
+                  const params = {
+                    patrolResultId: getStore("patrolResultId"),
+                    stakeEndId: this.patrolInfo.stakeEndId,
+                  };
+                  API.patrolEnd(params).then((response) => {
+                    this.patrollingBtn = false;
+                    removeStore("patrolResultId");
+                    this.$router.push({ path: "/inspection" });
+                  });
+                },
+              },
+              { text: "取消" },
+            ],
+          })
+          .then((a) => a.present());
+      }
     },
 
     /**
@@ -191,6 +278,7 @@ export default {
      */
     patrolEnd() {
       const params = { patrolResultId: getStore("patrolResultId") };
+      console.log(getStore("patrolResultId"));
       if (getStore("patrolResultId") !== null) {
         API.patrolEnd(params).then((response) => {
           if (response.statusCode === 1) {
