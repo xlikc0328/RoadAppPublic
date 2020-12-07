@@ -102,29 +102,71 @@ export default {
       this.$router.push("/record-record");
     },
     dailyPatrol() {
-      if (getStore("patrolResultId") !== null) {
+      console.log(getStore("patrolResultId"));
+      console.log(getStore("tempFlag1"));
+      if (
+        getStore("patrolResultId") !== null &&
+        getStore("tempFlag1") == "daily"
+      ) {
         this.$ionic.alertController
           .create({
             header: "日常巡查",
-            message: "尚有巡查未进行完毕",
+            message: "尚有日常巡查未进行完毕",
             buttons: ["确定"],
           })
           .then((a) => a.present());
         this.$router.push("/patrol-result");
+      } else if (getStore("tempFlag1") == "temp") {
+        this.$ionic.alertController
+          .create({
+            header: "临时巡查",
+            message: "尚有临时巡查未进行完毕",
+            buttons: ["确定"],
+          })
+          .then((a) => a.present());
+        this.$router.push({
+          path: "/patrol-result",
+          query: {
+            tempFlag: 1,
+          },
+        });
       } else {
         this.$router.push("/daily-patrol");
       }
     },
     tempPatrol() {
-      if (getStore("patrolResultId") !== null) {
+      if (
+        getStore("patrolResultId") !== null &&
+        getStore("tempFlag1") == "temp"
+      ) {
         this.$ionic.alertController
           .create({
             header: "临时巡查",
-            message: "尚有巡查未进行完毕",
+            message: "尚有临时巡查未进行完毕",
             buttons: ["确定"],
           })
           .then((a) => a.present());
-        this.$router.push("/patrol-result");
+        // this.$router.push("/patrol-result");
+        this.$router.push({
+          path: "/patrol-result",
+          query: {
+            tempFlag: 1,
+          },
+        });
+      } else if (getStore("tempFlag1") == "daily") {
+        this.$ionic.alertController
+          .create({
+            header: "日常巡查",
+            message: "尚有日常巡查未进行完毕",
+            buttons: ["确定"],
+          })
+          .then((a) => a.present());
+        this.$router.push({
+          path: "/patrol-result",
+          query: {
+            tempFlag: 0,
+          },
+        });
       } else {
         this.$router.push("/temp-patrol");
       }

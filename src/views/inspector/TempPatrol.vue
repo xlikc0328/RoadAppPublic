@@ -218,7 +218,7 @@ export default {
         nationalHighwayId: null,
         roadSectionId: null,
         patrolCar: null,
-        stakeEndId: "29",
+        stakeEndId: null,
         stakeBeginId: null,
         // 需要改动成当前登录用户所属部门的ID
         patrolOrganizationId: getStore("deptId"),
@@ -278,6 +278,7 @@ export default {
       });
     },
     confirmBegin() {
+      setStore("tempFlag1", "temp");
       this.$ionic.alertController
         .create({
           header: "临时巡查",
@@ -298,10 +299,6 @@ export default {
      * 开始巡查
      */
     patrolBegin() {
-      this.patrolResult.nationalHighwayId = this.nationalHighwayId;
-      this.patrolResult.stakeBeginId = this.patrolResult.stakeBeginId.split(
-        "."
-      )[0];
       const params = this.patrolResult;
       if (
         !(
@@ -311,6 +308,11 @@ export default {
           this.patrolResult.patrolCar === null
         )
       ) {
+        this.patrolResult.nationalHighwayId = this.nationalHighwayId;
+        this.patrolResult.stakeBeginId = this.patrolResult.stakeBeginId.split(
+          "."
+        )[0];
+        this.patrolResult.stakeEndId = this.patrolResult.stakeBeginId;
         setStore("patrolResult", this.patrolResult);
         API.patrolBegin(params).then((response) => {
           if (response.statusCode === 1) {
@@ -390,6 +392,7 @@ export default {
                     };
 
                     API.patrolEnd(params).then((response) => {
+                      removeStore("tempFlag1");
                       this.patrollingBtn = false;
                       this.$router.push({ path: "/inspection" });
                     });
@@ -403,6 +406,7 @@ export default {
         API.patrolEnd(params).then((response) => {
           if (response.statusCode === 1) {
             removeStore("patrolResultId");
+            removeStore("tempFlag1");
             this.patrolEndBtn = false;
 
             // this.$ionic.alertController

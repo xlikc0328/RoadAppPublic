@@ -158,6 +158,7 @@ export default {
   },
   methods: {
     confirmBegin() {
+      setStore("tempFlag1", "daily");
       this.$ionic.alertController
         .create({
           header: "日常巡查",
@@ -283,8 +284,10 @@ export default {
         patrolResultId: getStore("patrolResultId"),
         stakeEndId: this.patrolInfo.stakeEndId,
       };
+      removeStore("tempFlag1");
       if (getStore("patrolResultId") !== null) {
         API.patrolEnd(params).then((response) => {
+          removeStore("tempFlag1");
           if (response.statusCode === 1) {
             removeStore("patrolResultId");
             this.patrolEndBtn = false;

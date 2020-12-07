@@ -161,10 +161,25 @@ export default {
       });
     },
     editProblem(roadHazardId, patrolResultId) {
-      this.$router.push({
-        path: "/edit_problem",
-        query: { roadHazardId: roadHazardId, patrolResultId: patrolResultId },
-      });
+      if (this.tempFlag == 1) {
+        this.$router.push({
+          path: "/edit_problem",
+          query: {
+            roadHazardId: roadHazardId,
+            patrolResultId: patrolResultId,
+            tempFlag: 1,
+          },
+        });
+      } else {
+        this.$router.push({
+          path: "/edit_problem",
+          query: {
+            roadHazardId: roadHazardId,
+            patrolResultId: patrolResultId,
+            tempFlag: 0,
+          },
+        });
+      }
     },
     corfirmEnd() {
       this.$ionic.alertController

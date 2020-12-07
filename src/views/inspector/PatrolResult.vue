@@ -203,7 +203,7 @@ export default {
      * 巡查开始二次确认
      */
     confirmEnd() {
-      if (this.patrolInfo.endStake === "暂无终点桩") {
+      if (this.tempFlag == 1) {
         this.patrolEndBtn = false;
         // 弹框输入结束桩位置
         this.$ionic.alertController
@@ -237,6 +237,7 @@ export default {
                             text: "确定",
                             handler: () => {
                               this.alertFlag = 1;
+                              this.patrolEndBtn = true;
                             },
                           },
                         ],
@@ -254,6 +255,8 @@ export default {
                     API.patrolEnd(params).then((response) => {
                       this.patrollingBtn = false;
                       removeStore("patrolResultId");
+                      removeStore("tempFlag1");
+                      console.log(getStore("tempFlag1"));
                       this.$router.push({ path: "/inspection" });
                     });
                   }
@@ -277,6 +280,8 @@ export default {
                     stakeEndId: this.patrolInfo.stakeEndId,
                   };
                   API.patrolEnd(params).then((response) => {
+                    removeStore("tempFlag1");
+                    console.log(getStore("tempFlag1"));
                     this.patrollingBtn = false;
                     removeStore("patrolResultId");
                     this.$router.push({ path: "/inspection" });

@@ -680,7 +680,12 @@ export default {
 
     //Header的返回
     back() {
-      this.$router.go(-1);
+      this.$router.push({
+        path: "/patrol-result",
+        query: {
+          tempFlag: 1,
+        },
+      });
     },
   },
 };
