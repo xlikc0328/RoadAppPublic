@@ -49,17 +49,71 @@
         </ion-select>
       </ion-item>
 
-      <ion-segment>
-        <ion-segment-button value="cube" checked="volumeCheck" @click="handleCube">
+      <ion-segment v-if="volumeCheck">
+        <ion-segment-button v-if="flag == 1" value="cube" checked="true">
           <ion-label>体积</ion-label>
         </ion-segment-button>
-        <ion-segment-button value="square" checked="areaCheck" @click="handleSquare" >
+        <ion-segment-button v-if="flag != 1" value="cube" checked="true" @click="handleCube">
+          <ion-label>体积</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="square" @click="handleSquare" >
           <ion-label>面积</ion-label>
         </ion-segment-button>
-        <ion-segment-button value="length" checked="lengthCheck" @click="handleLength">
+        <ion-segment-button value="length" @click="handleLength">
           <ion-label>长度</ion-label>
         </ion-segment-button>
-        <ion-segment-button value="count" checked="numberCheck" @click="handleCount">
+        <ion-segment-button value="count" @click="handleCount">
+          <ion-label>数量</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+      <ion-segment v-if="areaCheck">
+        <ion-segment-button value="cube" @click="handleCube">
+          <ion-label>体积</ion-label>
+        </ion-segment-button>
+        <ion-segment-button v-if="flag == 2" value="square" checked="true">
+          <ion-label>面积</ion-label>
+        </ion-segment-button>
+        <ion-segment-button v-if="flag != 2" value="square" checked="true" @click="handleSquare">
+          <ion-label>面积</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="length" @click="handleLength">
+          <ion-label>长度</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="count" @click="handleCount">
+          <ion-label>数量</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+      <ion-segment v-if="lengthCheck">
+        <ion-segment-button value="cube" @click="handleCube">
+          <ion-label>体积</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="square" @click="handleSquare" >
+          <ion-label>面积</ion-label>
+        </ion-segment-button>
+        <ion-segment-button v-if="flag == 3" value="length" checked="true">
+          <ion-label>长度</ion-label>
+        </ion-segment-button>
+        <ion-segment-button v-if="flag != 3" value="length" checked="true" @click="handleLength">
+          <ion-label>长度</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="count" @click="handleCount">
+          <ion-label>数量</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+      <ion-segment v-if="numberCheck">
+        <ion-segment-button value="cube" @click="handleCube">
+          <ion-label>体积</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="square" @click="handleSquare" >
+          <ion-label>面积</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="length" @click="handleLength">
+          <ion-label>长度</ion-label>
+        </ion-segment-button>
+        <ion-segment-button v-if="flag == 4" value="count" checked="true">
+          <ion-label>数量</ion-label>
+        </ion-segment-button>
+        <ion-segment-button v-if="flag != 4" value="count" checked="true" @click="handleCount">
           <ion-label>数量</ion-label>
         </ion-segment-button>
       </ion-segment>
@@ -92,7 +146,8 @@
       <ion-item>
         <ion-label>是否存在安全隐患</ion-label>
       
-        <ion-toggle checked="addRoadProblemForm.potentialHazard" @ionChange="addRoadProblemForm.potentialHazard=$event.target.checked"></ion-toggle>
+        <ion-toggle v-if="addRoadProblemForm.potentialHazard" checked="true" @ionChange="addRoadProblemForm.potentialHazard=$event.target.checked"></ion-toggle>
+        <ion-toggle v-if="!addRoadProblemForm.potentialHazard" checked="false" @ionChange="addRoadProblemForm.potentialHazard=$event.target.checked"></ion-toggle>
      
       </ion-item>
 
@@ -133,7 +188,7 @@
       </div>
     </ion-card>
 
-    <ion-button expand="block" color="danger" @click="clickHandle()">提交问题</ion-button>
+    <ion-button expand="block" color="danger" @click="clickHandle()">保存问题</ion-button>
   </div>
 </template>
 <script>
@@ -178,6 +233,7 @@ export default {
       lengthOrNumber: false,
       length: false,
 
+      //默认选中的尺寸类型
       volumeCheck: false,
       areaCheck: false,
       lengthCheck: false,
@@ -200,7 +256,7 @@ export default {
         //具体尺寸
         specificSize:"",
         //安全隐患
-        potentialHazard:"",
+        potentialHazard: false,
         //描述
         description:"",
         //经度
@@ -287,8 +343,10 @@ export default {
         //安全隐患
         if(response.data.potentialHazard == "有") {
             this.addRoadProblemForm.potentialHazard = true
+            console.log(this.addRoadProblemForm.potentialHazard);
         }else {
             this.addRoadProblemForm.potentialHazard = false
+            console.log(this.addRoadProblemForm.potentialHazard);
         }
         //病害描述
         this.addRoadProblemForm.description = response.data.description
@@ -340,7 +398,7 @@ export default {
         if(!this.stake || !this.stream || !this.orientation) {
         this.$ionic.alertController
             .create({
-              header: "提交问题",
+              header: "保存问题",
               message: "请填写具体的位置信息！",
               buttons: ["确定"],
             })
@@ -348,7 +406,7 @@ export default {
       }else if(!this.addRoadProblemForm.hazardStatus) {
         this.$ionic.alertController
             .create({
-              header: "提交问题",
+              header: "保存问题",
               message: "请填写病害类型！",
               buttons: ["确定"],
             })
@@ -357,7 +415,7 @@ export default {
         if(this.flag == 0 && !this.cubeOrSquareLength && !this.cubeOrSquareWidth && !this.cubeOrSquareHeight) {
           this.$ionic.alertController
             .create({
-              header: "提交问题",
+              header: "保存问题",
               message: "请填写具体的病害情况！",
               buttons: ["确定"],
             })
@@ -365,7 +423,7 @@ export default {
         }else if(!this.cubeOrSquareLength || !this.cubeOrSquareWidth || !this.cubeOrSquareHeight) {
             this.$ionic.alertController
               .create({
-                header: "提交问题",
+                header: "保存问题",
                 message: "请填写长、宽、高！",
                 buttons: ["确定"],
               })
@@ -374,8 +432,8 @@ export default {
         }else if(this.cubeOrSquareLength && this.cubeOrSquareWidth && this.cubeOrSquareHeight) {
           this.$ionic.alertController
             .create({
-              header: "提交问题",
-              message: "确定要提交问题吗？",
+              header: "保存问题",
+              message: "确定要保存问题吗？",
               buttons: [
                 { text: "取消" },
                 {
@@ -392,7 +450,7 @@ export default {
         if(!this.cubeOrSquareLength || !this.cubeOrSquareWidth) {
           this.$ionic.alertController
             .create({
-              header: "提交问题",
+              header: "保存问题",
               message: "请填写长、宽！",
               buttons: ["确定"],
             })
@@ -400,8 +458,8 @@ export default {
         }else if(this.cubeOrSquareLength && this.cubeOrSquareWidth) {
           this.$ionic.alertController
             .create({
-              header: "提交问题",
-              message: "确定要提交问题吗？",
+              header: "保存问题",
+              message: "确定要保存问题吗？",
               buttons: [
                 { text: "取消" },
                 {
@@ -418,7 +476,7 @@ export default {
         if(!this.lengthOrNumberLength) {
           this.$ionic.alertController
             .create({
-              header: "提交问题",
+              header: "保存问题",
               message: "请填写长度！",
               buttons: ["确定"],
             })
@@ -426,8 +484,8 @@ export default {
         }else if(this.lengthOrNumberLength) {
           this.$ionic.alertController
             .create({
-              header: "提交问题",
-              message: "确定要提交问题吗？",
+              header: "保存问题",
+              message: "确定要保存问题吗？",
               buttons: [
                 { text: "取消" },
                 {
@@ -444,7 +502,7 @@ export default {
         if(!this.lengthOrNumberNumber) {
           this.$ionic.alertController
             .create({
-              header: "提交问题",
+              header: "保存问题",
               message: "请填写数量！",
               buttons: ["确定"],
             })
@@ -452,8 +510,8 @@ export default {
         }else if(this.lengthOrNumberNumber) {
           this.$ionic.alertController
             .create({
-              header: "提交问题",
-              message: "确定要提交问题吗？",
+              header: "保存问题",
+              message: "确定要保存问题吗？",
               buttons: [
                 { text: "取消" },
                 {
@@ -468,6 +526,7 @@ export default {
         }
       }
     },
+    //保存问题并提交
     addRoadProblem() {
       this.addRoadProblemForm.position = this.stake + " " + this.stream + "" + this.orientation + " ";
       if(this.addRoadProblemForm.potentialHazard){
@@ -531,7 +590,6 @@ export default {
     getAllhazard(){
       API.getAllhazard().then(response =>{
            this.hazardList = response.data;
-           console.log(this.hazardList);
       })
     },
     getAllUnit(){

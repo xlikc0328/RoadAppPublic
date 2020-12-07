@@ -583,8 +583,6 @@ export default {
     getAllhazard() {
       API.getAllhazard().then((response) => {
         this.hazardList = response.data;
-        console.log("hazardList");
-        console.log(this.hazardList);
       });
     },
     getAllUnit() {
