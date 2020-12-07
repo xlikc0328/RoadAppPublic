@@ -18,7 +18,7 @@
           <ion-grid>
             <ion-row>
               <ion-col>
-                <ion-input placeholder="如：12.3" style="font-size:14px;" :value="stake" @ionChange="stake=$event.target.value"></ion-input>           
+                <ion-input type="number" placeholder="如：12.3" style="font-size:14px;" :value="stake" @ionChange="stake=$event.target.value"></ion-input>           
               </ion-col>
 
               <ion-col>

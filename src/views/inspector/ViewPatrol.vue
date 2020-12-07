@@ -129,7 +129,7 @@ export default {
     },
     viewProblem(roadHazardId, patrolResultId) {
       this.$router.push({
-        path: "/view_problem",
+        path: "/view_patrol_problem",
         query: { roadHazardId: roadHazardId, patrolResultId: patrolResultId },
       });
     },
