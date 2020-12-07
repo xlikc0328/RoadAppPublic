@@ -123,3 +123,6 @@ export const modifyPwd = (params) =>{
 export const delectRoadProblem = (params) =>{
     return POST("/roadhazard/delectRoadProblem",params)
 }
+export const updateOneRoadProblem = (params) =>{
+        return POST("/roadhazard/updateOneRoadProblem",params)
+}
