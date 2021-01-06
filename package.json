@@ -24,7 +24,7 @@
     "@ionic-native/spinner-dialog": "^5.17.0",
     "@ionic/core": "^4.11.5",
     "@ionic/vue": "0.0.4",
-    "axios": "^0.19.0",
+    "axios": "^0.21.1",
     "better-scroll": "^1.15.2",
     "core-js": "^3.3.2",
     "moment": "^2.24.0",
